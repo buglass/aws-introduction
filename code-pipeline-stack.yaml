@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Demonstration of infrastructure as code by building a code pipeline from source'
+
+# https://kbroman.org/github_tutorial/pages/init.html
+
+Resources:
+
+    # Stored in AWS SSM
+    GitHubOAuthToken:
+      Type: AWS::SSM::Parameter::Value<String>
+      Default: CodePipelineDemo
+
+  # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create-cfn.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookauthconfiguration.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookfilterrule.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
+  # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create.html
+  Webhook:
+    Type: AWS::CodePipeline::Webhook
+    Name: DefaultWebhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref GitHubOAuthToken
+      Filters:
+        - JsonPath: '$.ref'
+          MatchEquals: !Sub refs/heads/master
+      TargetAction: UpdateFromSource
+      TargetPipeline: !Ref CodePipeline
+      TargetPipelineVersion: !GetAtt CodePipeline.Version
+      RegisterWithThirdParty: true
+
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Name: DefaultPipeline
+    RoleArn: todo
+    Version: 1
+    Stages:
+      Name: Source
+      Actions:
+        -
+          Name: SourceAction
+          - ActionTypeId:
+              Category: Source
+              Owner: ThirdParty
+              Provider: GitHub
+              Version: 1
+            OutputArtifacts:
+              - Name: SourceOutput
+            Configuration:
+              Owner: buglass
+              Repo: Pipeline
+              Branch: master
+              OAuthToken: !Ref GitHubOAuthToken
+              PollForSourceChanges: false
+            RunOrder: 1
