@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Demonstration of infrastructure as code by building a code pipeline from source'
 
 # https://kbroman.org/github_tutorial/pages/init.html
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
+# aws --profile adam-buglass-default cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml
+# aws --profile adam-buglass-default cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml --capabilities CAPABILITY_IAM
 
 Resources:
 
@@ -49,7 +52,7 @@ Resources:
             Effect: "Allow"
             Principal:
               Service:
-                - "*" # NO!
+                - 'codepipeline.amazonaws.com'
             Action:
               - "sts:AssumeRole"
       Path: "/"
