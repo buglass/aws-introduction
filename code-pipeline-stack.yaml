@@ -84,6 +84,7 @@ Resources:
         Type: S3
       Stages:
       - 
+        
         Name: Source
         Actions:
         -
@@ -102,3 +103,7 @@ Resources:
             OAuthToken: !Ref GitHubOAuthToken
             PollForSourceChanges: false
           RunOrder: 1
+
+        # Next: Add a build stage with a CodeBuild that doesn't yet do anything
+        # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create.html
+        # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html
