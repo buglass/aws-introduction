@@ -37,11 +37,38 @@ Resources:
       TargetPipelineVersion: !GetAtt CodePipeline.Version
       RegisterWithThirdParty: true
 
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "*" # NO!
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        -
+          PolicyName: "demonstration"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: "*" # NO!
+                Resource: "*" # NO!
+
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       Name: DefaultPipeline
-      RoleArn: todo
+      RoleArn: !Ref CodePipelineRole
       Stages:
       - 
         Name: Source
