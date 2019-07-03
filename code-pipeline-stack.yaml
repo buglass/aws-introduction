@@ -5,20 +5,27 @@ Description: 'Demonstration of infrastructure as code by building a code pipelin
 
 Resources:
 
-    # Stored in AWS SSM
-    GitHubOAuthToken:
-      Type: AWS::SSM::Parameter::Value<String>
-      Default: CodePipelineDemo
+  # Stored in AWS SSM
+  # GitHubOAuthToken:
+  #   Type: AWS::SSM::Parameter::Value<String>
+  #   Description: test
+  #   Default: CodePipelineDemo
+  GitHubOAuthToken:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: CodePipelineDemo
 
   # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create-cfn.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookauthconfiguration.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookfilterrule.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
   # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create.html
+
   Webhook:
     Type: AWS::CodePipeline::Webhook
-    Name: DefaultWebhook
     Properties:
+      Name: DefaultWebhook
       Authentication: GITHUB_HMAC
       AuthenticationConfiguration:
         SecretToken: !Ref GitHubOAuthToken
@@ -32,28 +39,27 @@ Resources:
 
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
-    Name: DefaultPipeline
-    RoleArn: todo
-    Version: 1
-    Stages:
-      Name: Source
-      Actions:
+    Properties:
+      Name: DefaultPipeline
+      RoleArn: todo
+      Version: 1
+      Stages:
+      - 
+        Name: Source
+        Actions:
         -
           Name: UpdateFromSource
-          - ActionTypeId:
-              Category: Source
-              Owner: ThirdParty
-              Provider: GitHub
-              Version: 1
-            OutputArtifacts:
-              - Name: SourceOutput
-            Configuration:
-              Owner: buglass
-              Repo: Pipeline
-              Branch: master
-              OAuthToken: !Ref GitHubOAuthToken
-              PollForSourceChanges: false
-            RunOrder: 1
-
-  # aws cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml --capabilities CAPABILITY_NAMED_IAM
-  # An error occurred (ExpiredToken) when calling the CreateStack operation: The security token included in the request is expired
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Provider: GitHub
+            Version: 1
+          OutputArtifacts:
+            - Name: SourceOutput
+          Configuration:
+            Owner: buglass
+            Repo: Pipeline
+            Branch: master
+            OAuthToken: !Ref GitHubOAuthToken
+            PollForSourceChanges: false
+          RunOrder: 1
