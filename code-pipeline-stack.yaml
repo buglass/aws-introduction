@@ -42,7 +42,6 @@ Resources:
     Properties:
       Name: DefaultPipeline
       RoleArn: todo
-      Version: 1
       Stages:
       - 
         Name: Source
