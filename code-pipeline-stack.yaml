@@ -67,11 +67,12 @@ Resources:
                 Action: "*" # NO!
                 Resource: "*" # NO!
 
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       Name: DefaultPipeline
-      RoleArn: !Ref CodePipelineRole
+      RoleArn: !GetAtt CodePipelineRole.Arn
       Stages:
       - 
         Name: Source
