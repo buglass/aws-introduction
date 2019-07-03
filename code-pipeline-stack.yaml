@@ -39,7 +39,7 @@ Resources:
       Name: Source
       Actions:
         -
-          Name: SourceAction
+          Name: UpdateFromSource
           - ActionTypeId:
               Category: Source
               Owner: ThirdParty
@@ -54,3 +54,6 @@ Resources:
               OAuthToken: !Ref GitHubOAuthToken
               PollForSourceChanges: false
             RunOrder: 1
+
+  # aws cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml --capabilities CAPABILITY_NAMED_IAM
+  # An error occurred (ExpiredToken) when calling the CreateStack operation: The security token included in the request is expired
