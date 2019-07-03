@@ -67,12 +67,19 @@ Resources:
                 Action: "*" # NO!
                 Resource: "*" # NO!
 
+  CodePipelineArtifactStore:
+    Type: AWS::S3::Bucket
+
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-artifactstore.html
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       Name: DefaultPipeline
       RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Location: 
+        Type: S3
       Stages:
       - 
         Name: Source
