@@ -3,6 +3,7 @@ Description: 'Demonstration of infrastructure as code by building a code pipelin
 
 # https://kbroman.org/github_tutorial/pages/init.html
 # https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
+# https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line
 # aws --profile adam-buglass-default cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml
 # aws --profile adam-buglass-default cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml --capabilities CAPABILITY_IAM
 
