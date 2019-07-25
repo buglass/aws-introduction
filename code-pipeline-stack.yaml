@@ -71,10 +71,52 @@ Resources:
   CodePipelineArtifactStore:
     Type: AWS::S3::Bucket
 
+  DefaultCodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - 'codebuild.amazonaws.com'
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        -
+          PolicyName: "demonstration"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: "*" # NO!
+                Resource: "*" # NO!
+
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-artifacts
+  DefaultCodeBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: NO_ARTIFACTS # Suspect this might need to be CODEPIPELINE
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:2.0
+        Type: LINUX_CONTAINER
+      ServiceRole: !GetAtt DefaultCodeBuildRole.Arn
+      Source:
+        BuildSpec: source/buildspec.yml
+        Type: CODEPIPELINE
+
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-artifactstore.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
+  # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -105,6 +147,20 @@ Resources:
             PollForSourceChanges: false
           RunOrder: 1
 
-        # Next: Add a build stage with a CodeBuild that doesn't yet do anything
         # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create.html
         # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html
+        # https://docs.aws.amazon.com/codebuild/latest/userguide/how-to-create-pipeline.html#pipelines-create-console
+        # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
+        Name: Build
+        Actions:
+        -
+          Name: BuildLambda
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: 1
+          Configuration:
+            ProjectName: !Ref DefaultCodeBuild
+          RunOrder: 1
