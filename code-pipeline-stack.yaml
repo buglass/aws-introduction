@@ -162,7 +162,7 @@ Resources:
             Provider: CodeBuild
             Version: 1
           InputArtifacts:
-            - Name: BuildInput
+            - Name: SourceOutput
           Configuration:
             ProjectName: !Ref DefaultCodeBuild
           RunOrder: 1
