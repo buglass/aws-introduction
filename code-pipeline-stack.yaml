@@ -35,7 +35,7 @@ Resources:
       TargetAction: UpdateFromSource
       TargetPipeline: !Ref CodePipeline
       TargetPipelineVersion: !GetAtt CodePipeline.Version
-      RegisterWithThirdParty: true
+      RegisterWithThirdParty: false
 
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html
