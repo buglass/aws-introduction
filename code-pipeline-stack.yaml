@@ -11,13 +11,10 @@ Resources:
 
   # Stored in AWS SSM
   GitHubOAuthToken:
-    Type: AWS::SSM::Parameter::Value<String>
-    Value: CodePipelineDemo
-  # GitHubOAuthToken:
-  #   Type: AWS::SSM::Parameter
-  #   Properties:
-  #     Type: String
-  #     Value: CodePipelineDemo
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value: CodePipelineDemo
 
   # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create-cfn.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookauthconfiguration.html
