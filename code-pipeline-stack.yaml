@@ -17,7 +17,7 @@ Resources:
   #     Value: CodePipelineDemo
   # https://aws.amazon.com/blogs/mt/using-aws-systems-manager-parameter-store-secure-string-parameters-in-aws-cloudformation-templates/
   GitHubOAuthToken:
-    Type: AWS::SSM::Parameter::Value<String>
+    Type: AWS::SSM::Parameter::Value::<String>
     Properties:
       Type: String
       Default: CodePipelineDemo
