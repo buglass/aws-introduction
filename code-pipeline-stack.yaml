@@ -18,8 +18,12 @@ Resources:
   # https://aws.amazon.com/blogs/mt/using-aws-systems-manager-parameter-store-secure-string-parameters-in-aws-cloudformation-templates/
   GitHubOAuthToken:
     Type: AWS::SSM::Parameter::Value<String>
-    Properties:
-      Default: CodePipelineDemo
+    Default: CodePipelineDemo
+
+  # GitHubToken:
+  #   Type: AWS::SSM::Parameter::Value<String>
+  #   Description: GitHub OAuth Token
+  #   Default: /auth/pipeline/webhook/gittoken
 
   # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create-cfn.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookauthconfiguration.html
