@@ -9,21 +9,11 @@ Description: 'Demonstration of infrastructure as code by building a code pipelin
 
 Parameters:
 
-  # Stored in AWS SSM
-  # GitHubOAuthToken:
-  #   Type: AWS::SSM::Parameter
-  #   Properties:
-  #     Type: String
-  #     Value: CodePipelineDemo
   # https://aws.amazon.com/blogs/mt/using-aws-systems-manager-parameter-store-secure-string-parameters-in-aws-cloudformation-templates/
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html
   GitHubOAuthToken:
     Type: AWS::SSM::Parameter::Value<String>
     Default: CodePipelineDemo
-
-  # GitHubToken:
-  #   Type: AWS::SSM::Parameter::Value<String>
-  #   Description: GitHub OAuth Token
-  #   Default: /auth/pipeline/webhook/gittoken
 
 Resources:
 
