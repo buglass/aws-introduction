@@ -137,7 +137,7 @@ Resources:
             - Name: SourceOutput
           Configuration:
             Owner: buglass
-            Repo: Pipeline
+            Repo: aws-introduction
             Branch: master
             OAuthToken: !Ref GitHubOAuthToken
             PollForSourceChanges: false
