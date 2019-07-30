@@ -10,11 +10,17 @@ Description: 'Demonstration of infrastructure as code by building a code pipelin
 Resources:
 
   # Stored in AWS SSM
+  # GitHubOAuthToken:
+  #   Type: AWS::SSM::Parameter
+  #   Properties:
+  #     Type: String
+  #     Value: CodePipelineDemo
+  # https://aws.amazon.com/blogs/mt/using-aws-systems-manager-parameter-store-secure-string-parameters-in-aws-cloudformation-templates/
   GitHubOAuthToken:
-    Type: AWS::SSM::Parameter
+    Type: AWS::SSM::Parameter::Value<String>
     Properties:
       Type: String
-      Value: CodePipelineDemo
+      Default: CodePipelineDemo
 
   # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create-cfn.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookauthconfiguration.html
@@ -35,7 +41,7 @@ Resources:
       TargetAction: UpdateFromSource
       TargetPipeline: !Ref CodePipeline
       TargetPipelineVersion: !GetAtt CodePipeline.Version
-      RegisterWithThirdParty: false
+      RegisterWithThirdParty: true
 
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html
