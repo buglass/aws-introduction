@@ -12,8 +12,7 @@ Resources:
   # Stored in AWS SSM
   GitHubOAuthToken:
     Type: AWS::SSM::Parameter::Value<String>
-    Description: test
-    Default: CodePipelineDemo
+    Value: CodePipelineDemo
   # GitHubOAuthToken:
   #   Type: AWS::SSM::Parameter
   #   Properties:
