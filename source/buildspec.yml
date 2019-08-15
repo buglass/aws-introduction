@@ -16,6 +16,7 @@ phases:
     commands:
       # build go application
       - cd source
+      - go get github.com/aws/aws-lambda-go/lambda
       - go build -o main
 
       # Package application with AWS SAM
