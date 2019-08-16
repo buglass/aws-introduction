@@ -146,7 +146,7 @@ Resources:
       - Name: Build
         Actions:
         -
-          Name: BuildLambda
+          Name: BuildPackage
           ActionTypeId:
             Category: Build
             Owner: AWS
