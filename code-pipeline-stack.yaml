@@ -1,15 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Demonstration of infrastructure as code by building a code pipeline from source'
 
-# https://kbroman.org/github_tutorial/pages/init.html
-# https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
-# https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line
-# aws --profile adam-buglass-default cloudformation create-stack --stack-name demonstration --template-body file://./code-pipeline-stack.yaml --capabilities CAPABILITY_IAM
-
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html
 Parameters:
 
   # https://aws.amazon.com/blogs/mt/using-aws-systems-manager-parameter-store-secure-string-parameters-in-aws-cloudformation-templates/
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html
   GitHubOAuthToken:
     Type: AWS::SSM::Parameter::Value<String>
     Default: CodePipelineDemo
@@ -17,10 +12,9 @@ Parameters:
 Resources:
 
   # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create-cfn.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookauthconfiguration.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-webhook-webhookfilterrule.html
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html
-  # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-webhooks-create.html
 
   Webhook:
     Type: AWS::CodePipeline::Webhook
@@ -61,12 +55,14 @@ Resources:
             Statement:
               -
                 Effect: "Allow"
-                Action: "*" # NO!
-                Resource: "*" # NO!
+                Action: "*" # Don't do this; it allows the role to perform all actions on it's resources!
+                Resource: "*" # Don't do this; it allows the role to perform it's actions on all resources!
 
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
   CodePipelineArtifactStore:
     Type: AWS::S3::Bucket
 
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
   DefaultCodeBuildRole:
     Type: AWS::IAM::Role
     Properties:
@@ -92,10 +88,9 @@ Resources:
                 Action: "*" # NO!
                 Resource: "*" # NO!
 
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-artifacts
   # https://docs.aws.amazon.com/codebuild/latest/userguide/concepts.html#concepts-how-it-works
   # https://docs.aws.amazon.com/codebuild/latest/userguide/getting-started.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
   DefaultCodeBuild:
     Type: AWS::CodeBuild::Project
     Properties:
@@ -114,12 +109,11 @@ Resources:
         BuildSpec: source/buildspec.yml
         Type: CODEPIPELINE
 
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html
+  # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-artifactstore.html
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html
-  # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
-
+  # https://docs.aws.amazon.com/codebuild/latest/userguide/how-to-create-pipeline.html
+  # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create.html
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -149,11 +143,6 @@ Resources:
             PollForSourceChanges: false
           RunOrder: 1
 
-      # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create.html
-      # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html
-      # https://docs.aws.amazon.com/codebuild/latest/userguide/how-to-create-pipeline.html#pipelines-create-console
-      # https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
-      # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
       - Name: Build
         Actions:
         -
