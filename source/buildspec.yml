@@ -21,7 +21,8 @@ phases:
 
       # Package application with AWS SAM
       # https://docs.aws.amazon.com/cli/latest/reference/cloudformation/package.html
-      - aws cloudformation package --template-file template.yml --s3-bucket ${ARTIFACT_STORE} --output-template-file packaged-source.yml
+      #- aws cloudformation package --template-file template.yml --s3-bucket ${ARTIFACT_STORE} --output-template-file packaged-source.yml
+      - aws cloudformation package --template-file ../code-pipeline-stack.yml --s3-bucket ${ARTIFACT_STORE} --output-template-file packaged-source.yml
 
 artifacts:
   files:
